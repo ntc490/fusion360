@@ -188,7 +188,7 @@ class Tool:
         """
         if type_str == 'holder':
             return Tool.TYPE_HOLDERS
-        elif type_str.find('mill') >= 0:
+        elif type_str.find('mill') >= 0 or type_str.find('counter sink') >= 0:
             return Tool.TYPE_MILLING
         elif type_str.find('drill') >= 0:
             return Tool.TYPE_HOLE_MAKING
