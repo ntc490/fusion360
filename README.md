@@ -1,7 +1,7 @@
 # fusion360
 ## Convert Fusion360 Tool Library to LinuxCNC Tool Table
 
-## Script Usage
+### Script Usage
 
 	ttable.py, Copyright (C) 2016 Nathan Crapo
 	ttable.py comes with ABSOLUTELY NO WARRANTY; for details
@@ -20,9 +20,9 @@
 	  --version                    Print program version
 
 
-## HOWTO
+### HOWTO
 
-### In Fusion360
+#### In Fusion360
 
 1. Select the CAM workspace
 2. Select "Manage" dropdown list
@@ -31,7 +31,7 @@
 5. Specify a file
 
 
-### From the console of your computer
+#### From the console of your computer
 
 Use the ttable.py script to convert your exported tool library to a Linux CNC
 tool table.
