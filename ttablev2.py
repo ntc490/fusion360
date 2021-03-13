@@ -1,14 +1,14 @@
 #!/usr/bin/python
 """
-ttable.py, Copyright (C) 2016 Nathan Crapo
-ttable.py comes with ABSOLUTELY NO WARRANTY; for details
+ttablev2.py, Copyright (C) 2016 Nathan Crapo
+ttablev2.py comes with ABSOLUTELY NO WARRANTY; for details
 see GPLv2 header within.  This is free software, and you
 are welcome to redistribute it under certain conditions;
 see header for details.
 
 Usage:
-  ttable.py [-o <output_file>] [-m | --metric] [-l | --linuxcnc-file <linuxcnc-file-name> ]  <file>
-  ttable.py [-o <output_file>] [-i | --imperial] [-l | --linuxcnc-file <linuxcnc-file-name>] <file>
+  ttablev2.py [-o <output_file>] [-m | --metric] [-l | --linuxcnc-file <linuxcnc-file-name> ]  <file>
+  ttablev2.py [-o <output_file>] [-i | --imperial] [-l | --linuxcnc-file <linuxcnc-file-name>] <file>
 
 Options:
   -m, --metric                        Set machine units to metric (default)
