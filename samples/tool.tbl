@@ -1,0 +1,58 @@
+T10 P0 D3.000000 I+91.400000 J+3.000000 Q1 ;- 3 flute End Mill - flat end mill 
+T11 P0 D3.029500 Z-57.164400 I+96.000000 J+3.000000 Q1 ;- 2 flute End Mill - flat end mill 
+T12 P0 D3.000000 I+87.000000 J+3.000000 Q1 ;- 2 flute End Mill - ball end mill 
+T13 P0 D4.000000 I+62.500000 J+4.000000 Q1 ;- 4 flute End Mill - flat end mill 
+T14 P0 D6.000000 I+63.000000 J+6.000000 Q1 ;- flute End Mill - flat end mill 
+T15 P0 D6.000000 I+65.000000 J+6.000000 Q1 ;- 3 flute End Mill - flat end mill 
+T16 P0 D6.072100 Z-77.937000 I+77.000000 J+6.000000 Q1 ;- 2 flute End Mill - flat end mill 
+T17 P0 D6.000000 I+86.000000 J+6.000000 Q1 ;- 3 flute End Mill - ball end mill 
+T18 P0 D6.000000 I+175.500000 J+6.000000 Q1 ;- 2 flute End Mill - ball end mill 
+T19 P0 D6.000000 I+130.000000 J+6.000000 Q1 ;- Empty - flat end mill 
+T20 P0 D5.000000 I+90.500000 J+5.000000 Q1 ;Biax - 4 flute End Mill - flat end mill 
+T21 P0 D5.000000 I+87.000000 J+5.000000 Q1 ;- Empty for Biax - flat end mill 
+T22 P0 D8.000000 I+70.000000 J+8.000000 Q1 ;- 3 flute End Mill - flat end mill 
+T23 P0 D8.000000 I+85.500000 J+8.000000 Q1 ;Holex - 4 flute End Mill - flat end mill 
+T24 P0 D8.000000 I+78.700000 J+8.000000 Q1 ;Holex - 6 flute End Mill - flat end mill 
+T25 P0 D8.000000 I+105.500000 J+8.000000 Q1 ;- 4 flute End Mill - bull nose end mill 
+T26 P0 D8.000000 I+138.300000 J+8.000000 Q1 ;- 4 flute End Mill - flat end mill 
+T30 P0 D10.000000 I+81.000000 J+10.000000 Q1 ;- 4 flute End Mill - flat end mill 
+T31 P0 D10.000000 I+83.500000 J+10.000000 Q1 ;Holex - 4 flute End Mill - flat end mill 
+T32 P0 D10.000000 I+105.500000 J+10.000000 Q1 ;- 4 flute End Mill - ball end mill 
+T35 P0 D12.000000 I+75.300000 J+12.000000 Q1 ;- 3 flute End Mill - flat end mill 
+T36 P0 D12.000000 I+93.000000 J+12.000000 Q1 ;-  3 flute End Mill *** LEFT HAND *** - flat end mill 
+T37 P0 D12.062700 Z-57.234400 I+88.000000 J+12.000000 Q1 ;- 6 flute End Mill - flat end mill 
+T38 P0 D12.000000 I+79.000000 J+12.000000 Q1 ;- Empty - flat end mill 
+T39 P0 D12.000000 I+79.000000 J+12.000000 Q1 ;- Empty - flat end mill 
+T45 P0 D16.000000 I+113.500000 J+16.000000 Q1 ;- Roughout Flat End Mill - flat end mill 
+T46 P0 D16.000000 I+63.800000 J+16.000000 Q1 ;- Empty - flat end mill 
+T47 P0 D20.000000 I+75.400000 J+20.000000 Q1 ;- Empty - flat end mill 
+T70 P0 D20.000000 I+79.000000 J+20.000000 Q1 ;Iscar - Face Mill - face mill 
+T71 P0 D40.000000 I+39.500000 J+40.000000 Q1 ;- Empty - face mill 
+T72 P0 D49.800000 I+65.700000 J+49.800000 Q1 ;- Face Mill - face mill 
+T73 P0 D52.000000 I+59.500000 J+52.000000 Q1 ;- Face Mill - face mill 
+T74 P0 D52.000000 I+49.500000 J+52.000000 Q1 ;- Empty - face mill 
+T75 P0 D99.300000 I+77.400000 J+99.300000 Q1 ;- Face Mill - face mill 
+T80 P0 D6.039100 Z-63.521061 I+95.500000 J+6.000000 Q2 ;Vobeco - 40°Chamfer Mill - chamfer mill
+T81 P0 D4.140600 Z-71.432200 I+94.500000 J+4.000000 Q2 ;- 40° Chamfer Mill - chamfer mill 
+T82 P0 D9.857865 Z-75.123955 I+79.500000 J+10.000000 Q2 ;- 40° Chamfer Mill - chamfer mill 
+T95 P0 D49.900000 I+127.300000 J+49.900000 Q1 ;- Slitting Saw 13mm Arbor - slot mill 
+T96 P0 D100.000000 I+170.000000 J+100.000000 Q1 ;- Slitting Saw 20mm Arbor - slot mill 
+T200 P0 D3.000000 I+109.800000 J+3.000000 Q2 ;- 2-8mm Drill Chuck - drill 
+T201 P0 D4.000000 I+84.000000 J+4.000000 Q2 ;- 3.3mm Carbide Drill - drill 
+T202 P0 D4.000000 I+84.000000 J+4.000000 Q2 ;- 4mm Carbide Drill - drill 
+T203 P0 D4.252600 Z-74.469300 I+78.000000 J+4.000000 Q2 ;- 4.2mm Carbide Drill - drill 
+T204 P0 D5.000000 I+94.000000 J+5.000000 Q2 ;- 5mm Carbide Drill - drill 
+T205 P0 D6.000000 Z-60.356900 I+95.000000 J+6.000000 Q2 ;- 6mm Carbide Drill - drill 
+T206 P0 D6.000000 I+105.500000 J+6.000000 Q2 ;- 6.8mm Carbide Drill - drill 
+T207 P0 D7.262500 Z-64.573300 I+97.500000 J+8.000000 Q2 ;- 8mm Carbide Drill - drill 
+T208 P0 D10.000000 I+110.500000 J+10.000000 Q2 ;- 8.6mm Carbide Drill - drill 
+T209 P0 D14.000000 I+131.800000 J+14.000000 Q2 ;- 14mm Carbide Drill - drill 
+T210 P0 D15.800000 I+138.300000 J+15.800000 Q2 ;- 16mm Carbide Drill - drill 
+T211 P0 D3.000000 I+150.000000 J+3.000000 Q2 ;- 2-16mm Drill Chuck - drill 
+T212 P0 D3.000000 I+172.200000 J+3.000000 Q2 ;- 2-16mm Drill Chuck - drill 
+T213 P0 D4.101800 Z-57.998300 I+92.300000 J+6.300000 Q2 ;- 2.4/6.3 spot drill 2-8mm Drill Chuck - center drill 
+T214 P0 D12.000000 I+94.500000 J+12.000000 Q2 ;- spot drill - spot drill 
+T260 P0 D3.000000 I+113.000000 J+3.000000 Q2 ;- WES 1B - tap right hand 
+T261 P0 D10.000000 I+144.000000 J+10.000000 Q2 ;- ER20 - tap right hand 
+T275 P0 D4.000000 I+48.500000 J+4.000000 Q16 ;- Edge Finder - probe 
+T276 P0 Z0.000000 D6.000000 I+102.500000 J+6.000000 Q16 ;Renishaw - MP12H - probe 
