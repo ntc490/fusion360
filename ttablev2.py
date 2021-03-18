@@ -253,11 +253,7 @@ class Tool:
     def length(self):
         "Get shoulder + holder lengh for tool."
         try:
-            bitmap=Tool.TYPE_PROBE | Tool.TYPE_TURNING
-            if (self.type() & bitmap):
-                d = float(self.raw_dict['geometry']['LB'])
-            else:
-                d = float(self.raw_dict['geometry']['shoulder-length'])
+            d = float(self.raw_dict['geometry']['LB'])
             for segment in self.raw_dict['holder']['segments']:
               d = d + float(segment['height'])
         except:
