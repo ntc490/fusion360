@@ -155,18 +155,22 @@ class Tool:
     """
     TYPE_UNKNOWN = 0
     TYPE_MILLING = 1
-    TYPE_HOLE_MAKING = 2
-    TYPE_TURNING = 4
-    TYPE_HOLDERS = 8
-    TYPE_PROBE = 16
-    TYPE_ALL = (TYPE_MILLING | TYPE_HOLE_MAKING | TYPE_TURNING | TYPE_HOLDERS | TYPE_PROBE)
+    TYPE_BALL_END_MILL = 2
+    TYPE_FACE_END_MILL = 4
+    TYPE_CHAMFER_MILL = 8
+    TYPE_FLAT_END_MILL = 16
+    TYPE_HOLE_MAKING = 32
+    TYPE_TURNING = 64
+    TYPE_HOLDERS = 128
+    TYPE_PROBE = 256
+    TYPE_ALL = (TYPE_MILLING | TYPE_BALL_END_MILL | TYPE_FACE_END_MILL | TYPE_CHAMFER_MILL | TYPE_FLAT_END_MILL | TYPE_HOLE_MAKING | TYPE_TURNING | TYPE_HOLDERS | TYPE_PROBE)
 
     def __init__(self, d):
         "Pass dictionary from Fusion 360 file."
         self.raw_dict = d
         self.calculated_type = Tool.__calc_type(d['type'])
-        self.lcnc_diameter_in = float(0.0)
-        self.lcnc_length_in = float(0.0)
+        self.lcnc_length_in = self.length()
+        self.lcnc_diameter_in = self.diameter()
         self.lcnc_pocket_in = 0
 
     def set_lcnc_data(self, lcnc_data_in):
@@ -175,16 +179,18 @@ class Tool:
             lcnc_i = [item[1:] for item in lcnc_data_in if (item[0].lower() == "i")]
             if len(lcnc_i)==1:
                 i = float(lcnc_i[0])
-            lcnc_j = [item[1:] for item in lcnc_data_in if (item[0].lower() == "j")]
-            if len(lcnc_j)==1:
-                j = float(lcnc_j[0])
+            lcnc_d = [item[1:] for item in lcnc_data_in if (item[0].lower() == "d")]
+            if len(lcnc_d)==1:
+                d = float(lcnc_d[0])
+            else:
+                d = 0
             lcnc_q = [item[1:] for item in lcnc_data_in if (item[0].lower() == "q")]
             if len(lcnc_q)==1:
                 q = int(lcnc_q[0])
             else:
                 q = 0
 
-            if (isclose(i, self.length()) and isclose(j, self.diameter()) and q == self.type()):
+            if (isclose(i, self.length()) and isclose(d, self.diameter()) and q == self.type_lcnc()):
                 lcnc_l = [item[1:] for item in lcnc_data_in if (item[0].lower() == "z")]
                 if len(lcnc_l)==1:
                     self.lcnc_length_in = float(lcnc_l[0])
@@ -192,10 +198,10 @@ class Tool:
                 if len(lcnc_d)==1:
                     self.lcnc_diameter_in = float(lcnc_d[0])
             else:
-                sys.stderr.write("Tool %d, igoring LinuxCNC diameter and length data due to either I(%.6f/%.6f), J(%.6f/%.6f) or type(%d/%d) mismatch\n" % 
-                           (self.num(), i, self.length(), j, self.diameter(), q, self.type()))
+                sys.stderr.write("Tool %d, igoring LinuxCNC diameter and length data due to either I(%.6f/%.6f), D(%.6f/%.6f) or type(%d/%d) mismatch\n" % 
+                           (self.num(), i, self.length(), d, self.diameter(), q, self.type_lcnc()))
                 self.lcnc_length_in = 0
-                self.lcnc_diameter_in = 0
+                self.lcnc_diameter_in = self.diameter()
                 self.lcnc_pocket_in = 0
             # always take the lcnc pocket
             lcnc_p = [item[1:] for item in lcnc_data_in if (item[0].lower() == "p")]
@@ -210,6 +216,14 @@ class Tool:
         "Return diameter of the tool.  Holders do not have a diameter, for example."
         try:
             d = float(self.raw_dict['geometry']['DC'])
+        except:
+            d = float(0.0)
+        return d
+
+    def corner_radius(self):
+        "Return corner radius of the tool. Most tools dont have one, ball nose for example, do."
+        try:
+            d = float(self.raw_dict['geometry']['RE'])
         except:
             d = float(0.0)
         return d
@@ -246,6 +260,16 @@ class Tool:
         "Return tool type ID."
         return self.calculated_type
 
+    def type_lcnc(self):
+        "Return tool type id in a linuxcnc friendly format for column Q. i.e instead of using the bitwize mask 1 2 .. 32 64, convert to linear 1..9"
+        "Q - tool orientation (lathe only) - integer, 0-9"
+        t=self.calculated_type
+        lcnc_id=0
+        while t>0:
+            t=t>>1
+            lcnc_id=lcnc_id+1
+        return lcnc_id
+
     def units(self):
         "Get units of properties for tool."
         return self.raw_dict['unit']
@@ -274,6 +298,14 @@ class Tool:
             return Tool.TYPE_HOLDERS
         elif type_str.find('drill') >= 0 or type_str.find('tap') >= 0 or type_str.find('chamfer') >= 0:
             return Tool.TYPE_HOLE_MAKING
+        elif type_str.find('ball end mill') >= 0 or type_str.find('bull nose end mill') >= 0:
+            return Tool.TYPE_BALL_END_MILL
+        elif type_str.find('face mill') >= 0:
+            return Tool.TYPE_FACE_END_MILL
+        elif type_str.find('chamfer mill') >= 0:
+            return Tool.TYPE_CHAMFER_MILL
+        elif type_str.find('flat end mill') >= 0:
+            return Tool.TYPE_FLAT_END_MILL
         elif type_str.find('mill') >= 0:
             return Tool.TYPE_MILLING
         elif type_str.find('turning') >= 0:
@@ -309,13 +341,12 @@ def print_linuxcnc_tool_table(out_file, tool_library):
     for tool in tool_library.get_tools():
         conv_unit = tool_library.get_unit_converter(tool)
         if tool.num() > 0:
-          out_file.write("T%d P%d Z%.6f D%.6f I%.6f J%.6f Q%d  ;%s\n" % (tool.num(), # tool num
+          out_file.write("T%d P%d D%.6f Z%.6f I%.6f Q%d  ;%s\n" % (tool.num(), # tool num
                                                   tool.lcnc_pocket(), # pocket num
-                                                  conv_unit(tool.lcnc_length()), # z offset - manage in the LinuxCNC tool table
                                                   conv_unit(tool.lcnc_diameter()), # v offset, using it for aproximate diameter
+                                                  conv_unit(tool.lcnc_length()), # z offset - manage in the LinuxCNC tool table
                                                   conv_unit(tool.length()), # u offset, using it for aproximate z height
-                                                  conv_unit(tool.diameter()),
-                                                  tool.type(), # tool orientation, using tool type here
+                                                  tool.type_lcnc(), # tool orientation, using tool type here
                                                   tool.vendor().encode('utf-8') + " - " + tool.description().encode('utf-8') + " - " + tool.type_str().encode('utf-8')))
         #else:
         #  sys.stdout.write("Skipping ... t%d p%d z%d d%.3f ;%s\n" % (tool.num(), # tool num
