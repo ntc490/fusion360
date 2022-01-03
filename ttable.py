@@ -238,7 +238,7 @@ def main():
         output_file = sys.stdout
     else:
         try:
-            output_file = file(output_filename, 'w')
+            output_file = open(output_filename, 'w')
         except IOError as e:
             sys.stderr.write("%s\n" % e)
             sys.exit(-1)
