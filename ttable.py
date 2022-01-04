@@ -21,17 +21,17 @@ Options:
 # Utility to convert Fusion 360 Tool Library to LinuxCNC tool table
 #
 # Copyright (C) 2016  Nathan Crapo
-# 
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
 # of the License, or (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -43,11 +43,9 @@ import sys
 from docopt import docopt
 
 
-
 # ----- Constants -----
 
 VERSION = '1.0.0'
-
 
 
 # ----- Classes -----
@@ -57,9 +55,9 @@ class ToolLibrary:
     Manage a collection of tools.  Provide filtering and ordering of
     the list for clients.
     """
-    ORDER_TOOL_NUM=1
-    ORDER_TOOL_TYPE=2
-    ORDER_VENDOR=3
+    ORDER_TOOL_NUM = 1
+    ORDER_TOOL_TYPE = 2
+    ORDER_VENDOR = 3
     METRIC_UNITS = 'millimeters'
     IMPERIAL_UNITS = 'inches'
     DEFAULT_UNITS = METRIC_UNITS
@@ -103,17 +101,18 @@ class ToolLibrary:
     def get_tools(self):
         "Get ordered, filtered subset of tools from this library."
         sort_func = self.__get_sort_func()
-        tools = [ t for t in self.tools if t.type() & self.filter ]
+        tools = [t for t in self.tools if t.type() & self.filter]
         return sorted(tools, key=sort_func)
 
     def get_unit_converter(self, tool):
         ratio = 1
         if (self.machine_units == self.METRIC_UNITS and
-            tool.units() == self.IMPERIAL_UNITS):
+                tool.units() == self.IMPERIAL_UNITS):
             ratio = 25.4
         elif (self.machine_units == self.IMPERIAL_UNITS and
               tool.units() == self.METRIC_UNITS):
             ratio = 1 / 25.4
+
         def basic_converter(value):
             return value * ratio
         return basic_converter
@@ -125,7 +124,6 @@ class ToolLibrary:
             return lambda x: x.vendor()
         else:
             return lambda x: x.num()
-
 
 
 class Tool:
@@ -148,6 +146,7 @@ class Tool:
         "Return diameter of the tool.  Holders do not have a diameter, for example."
         try:
             d = self.raw_dict['geometry']['DC']
+
         except:
             d = 0
         return d
@@ -161,7 +160,7 @@ class Tool:
         return n
 
     def vendor(self):
-        "Return the tool vendor."        
+        "Return the tool vendor."
         return self.raw_dict['vendor']
 
     def description(self):
@@ -208,7 +207,6 @@ class Tool:
         return r
 
 
-
 # ----- Helpers -----
 
 def print_linuxcnc_tool_table(out_file, tool_library):
@@ -216,47 +214,43 @@ def print_linuxcnc_tool_table(out_file, tool_library):
     Print tools in LinuxCNC table format.  The out_file may be stdout or a file
     object to a file on disk.
     """
+
     for tool in tool_library.get_tools():
         conv_unit = tool_library.get_unit_converter(tool)
-        out_file.write("t%d p%d z%d d%f ;%s\n" % (tool.num(), # tool num
-                                                  tool.num(), # pocket num
-                                                  0, # z offset - manage in the LinuxCNC tool table
-                                                  conv_unit(tool.diameter()),
-                                                  tool.vendor() + " - " + tool.description()))
-
+        out_file.write(f'T{tool.num():<8} '
+                       f'P{tool.num():<8} '
+                       f'Z{0:<8} '
+                       f'D{conv_unit(tool.diameter()):08.5f} '
+                       f'; {tool.vendor() + " - " + tool.description()} \n')
 
 
 # ----- Main Application -----
 
 def main():
     "Program entry point."
-    arguments = docopt(__doc__, version = VERSION)
+    arguments = docopt(__doc__, version=VERSION)
     input_filename = arguments['<file>']
     output_filename = arguments['--output']
 
     if output_filename is None or output_filename == '-':
         output_file = sys.stdout
     else:
-        try:
-            output_file = open(output_filename, 'w')
-        except IOError as e:
-            sys.stderr.write("%s\n" % e)
-            sys.exit(-1)
+        with open(output_filename, 'w') as output_file:
+            try:
+                library = ToolLibrary(input_filename)
+            except IOError as e:
+                sys.stderr.write("%s\n" % e)
+                sys.exit(-1)
 
-    try:
-        library = ToolLibrary(input_filename)
-    except IOError as e:
-        sys.stderr.write("%s\n" % e)
-        sys.exit(-1)
+            if arguments['--metric']:
+                library.set_machine_units(ToolLibrary.METRIC_UNITS)
+            elif arguments['--imperial']:
+                library.set_machine_units(ToolLibrary.IMPERIAL_UNITS)
 
-    if arguments['--metric']: library.set_machine_units(ToolLibrary.METRIC_UNITS)
-    elif arguments['--imperial']: library.set_machine_units(ToolLibrary.IMPERIAL_UNITS)
+            library.show(Tool.TYPE_ALL)
+            library.hide(Tool.TYPE_HOLDERS)
 
-    library.show(Tool.TYPE_ALL)
-    library.hide(Tool.TYPE_HOLDERS)
-
-    print_linuxcnc_tool_table(output_file, library)
-
+            print_linuxcnc_tool_table(output_file, library)
 
 
 if __name__ == "__main__":
