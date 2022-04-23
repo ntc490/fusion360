@@ -196,7 +196,7 @@ class Tool:
         else:
             return Tool.TYPE_UNKNOWN
 
-    def __repr__(self):
+    def __str__(self):
         r = "tool#=%d, dia=%d %s, vendor=%s, desc=%s, %s[%d]\n" % (self.num(),
                                                                    self.diameter(),
                                                                    self.units(),
