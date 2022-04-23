@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 ttable.py, Copyright (C) 2016 Nathan Crapo
 ttable.py comes with ABSOLUTELY NO WARRANTY; for details
