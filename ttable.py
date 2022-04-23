@@ -235,22 +235,27 @@ def main():
     if output_filename is None or output_filename == '-':
         output_file = sys.stdout
     else:
-        with open(output_filename, 'w') as output_file:
-            try:
-                library = ToolLibrary(input_filename)
-            except IOError as e:
-                sys.stderr.write("%s\n" % e)
-                sys.exit(-1)
+        try:
+            output_file = open(output_filename, 'w')
+        except IOError as e:
+            sys.stderr.write("%s\n" % e)
+            sys.exit(-1)
 
-            if arguments['--metric']:
-                library.set_machine_units(ToolLibrary.METRIC_UNITS)
-            elif arguments['--imperial']:
-                library.set_machine_units(ToolLibrary.IMPERIAL_UNITS)
+    try:
+        library = ToolLibrary(input_filename)
+    except IOError as e:
+        sys.stderr.write("%s\n" % e)
+        sys.exit(-1)
 
-            library.show(Tool.TYPE_ALL)
-            library.hide(Tool.TYPE_HOLDERS)
+    if arguments['--metric']:
+        library.set_machine_units(ToolLibrary.METRIC_UNITS)
+    elif arguments['--imperial']:
+        library.set_machine_units(ToolLibrary.IMPERIAL_UNITS)
 
-            print_linuxcnc_tool_table(output_file, library)
+    library.show(Tool.TYPE_ALL)
+    library.hide(Tool.TYPE_HOLDERS)
+
+    print_linuxcnc_tool_table(output_file, library)
 
 
 if __name__ == "__main__":
